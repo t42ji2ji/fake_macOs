@@ -40,7 +40,8 @@ export default {
   },
   data(){ 
     return {
-      application: "vue"
+      application: "vue",
+      time: ""
     }
   },
   mounted() {
@@ -72,6 +73,18 @@ export default {
         element.style.boxShadow = "none"
       }
 
+    },
+    setDates: function(){
+      var dt = new Date()
+      var month = new Array(7)
+      month[1] = "週一"
+      month[2] = "週二"
+      month[3] = "週三"
+      month[4] = "週四"
+      month[5] = "週五"
+      month[6] = "週六"
+      month[0] = "週日"
+      this.time = dt.getDay()
     },
     test: function(){
       console.log("test");
