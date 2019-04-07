@@ -8,6 +8,7 @@
         .status_item.edit 編輯
         .status_item.show 顯示方式
         .status_item.goto 前往
+        .status_item.time {{time}}
     .container
       VueDragResize(:isActive="false" :parentLimitation="true" :w="800" :h="600" :x="90" :y="90" v-on:resizing="resize" v-on:dragging="resize"  @activated="onActivated(true)" @deactivated="onActivated(false)")
         .window#windows
@@ -40,12 +41,13 @@ export default {
   },
   data(){ 
     return {
-      application: "vue",
+      application: "VUE",
       time: ""
     }
   },
   mounted() {
     this.tunami_effect()
+    this.setDates()
   },
   methods: {
     tunami_effect: function(){
@@ -84,7 +86,8 @@ export default {
       month[5] = "週五"
       month[6] = "週六"
       month[0] = "週日"
-      this.time = dt.getDay()
+      let min = dt.getMinutes() < 10 ? "0" + dt.getMinutes() : dt.getMinutes()
+      this.time = month[dt.getDay()] + " " + dt.getHours() + ":" + min
     },
     test: function(){
       console.log("test");
@@ -95,7 +98,7 @@ export default {
 
 <style lang="sass">
 @mixin tt($name)
-  &:after
+  &:after:hover
     font-size: .8rem
     font-weight: bold
     content: $name
@@ -176,9 +179,10 @@ section
 .item-5
   content:url("https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/1200px-Steam_icon_logo.svg.png")
 .item-6
-  content:url("https://developer.apple.com/design/human-interface-guidelines/macos/images/icons/appIcons/AppIcon_Photos_2x.png")
-.item-7
   content:url("https://www.macupdate.com/images/icons256/58607.png?d=1504272826")
+.item-7
+  content:url("https://support.apple.com/library/content/dam/edam/applecare/images/en_US/social/thumbnail/macos-mojave-trash-icon-full-thumbnail_2x.png")
+
 .icon :hover
   width: 120%
   
@@ -270,6 +274,7 @@ section
 .status_items
   height: 100%
   display: flex
+  align-items: flex-end
   flex-direction: row
   color: white
 
@@ -278,8 +283,10 @@ section
   margin-right: 15px
   font-weight: bold
   cursor: pointer
+  text-align: center
 
 .application
+  padding-top: .11rem
   font-weight: bolder
 
 .appleicon
@@ -288,6 +295,9 @@ section
   background: url(/apple.png) no-repeat 
   background-size: contain
 
+.time
+  justify-self: end
+  margin-left: auto
     
 
 
