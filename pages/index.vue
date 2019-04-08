@@ -9,6 +9,7 @@
         .status_item.show 顯示方式
         .status_item.goto 前往
         .status_item.time {{time}}
+        .status_item.siricon
     .container
       VueDragResize(:isActive="false" :parentLimitation="true" :w="800" :h="600" :x="90" :y="90" v-on:resizing="resize" v-on:dragging="resize"  @activated="onActivated(true)" @deactivated="onActivated(false)")
         .window#windows
@@ -67,17 +68,15 @@ export default {
         this.left = newRect.left;
     },
     onActivated: function(active){
-      console.log("act");
       let element = document.getElementById("windows")
       if(active){
-        element.style.boxShadow = "30px 30px 50px #1c1c1c"
+        element.style.boxShadow = "20px 20px 50px #1c1c1c"
       }else{
         element.style.boxShadow = "none"
       }
 
     },
     setDates: function(){
-      var dt = new Date()
       var month = new Array(7)
       month[1] = "週一"
       month[2] = "週二"
@@ -86,8 +85,13 @@ export default {
       month[5] = "週五"
       month[6] = "週六"
       month[0] = "週日"
-      let min = dt.getMinutes() < 10 ? "0" + dt.getMinutes() : dt.getMinutes()
-      this.time = month[dt.getDay()] + " " + dt.getHours() + ":" + min
+      let timmer = (()=>{
+        var dt = new Date()
+        let min = dt.getMinutes() < 10 ? "0" + dt.getMinutes() : dt.getMinutes()
+        this.time = month[dt.getDay()] + " " + dt.getHours() + ":" + min
+      })
+      timmer()
+      let timer = setInterval(timmer, 60000)
     },
     test: function(){
       console.log("test");
@@ -196,6 +200,8 @@ section
   position: relative
   display: flex
   flex-direction: column
+  transition: .2s
+
   &:onfocus
     background-color: orange
 
@@ -268,7 +274,7 @@ section
   
 .statusbar
   width: 100%
-  height: 1.5rem
+  height: 1.8rem
   background-color: #1d1e1e
 
 .status_items
@@ -284,16 +290,26 @@ section
   font-weight: bold
   cursor: pointer
   text-align: center
+  line-height: 1.8rem
 
 .application
-  padding-top: .11rem
+  padding-top: 0
   font-weight: bolder
 
 .appleicon
   margin-left: 20px
-  width: 20px
+  width: 16px
   background: url(/apple.png) no-repeat 
   background-size: contain
+  background-position: center
+
+.siricon
+  width: 18px
+  background: url(/siri.png) no-repeat 
+  background-size: contain
+  background-position: center
+  justify-self: end
+  margin-left: 0
 
 .time
   justify-self: end
