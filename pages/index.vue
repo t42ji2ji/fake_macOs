@@ -1,17 +1,41 @@
 <template lang="pug">
-  section
+  section(v-on:click="white_space")
     .statusbar
       .status_items
-        .status_item.appleicon
-        .status_item.application {{application}}
-        .status_item.file 檔案
-        .status_item.edit 編輯
-        .status_item.show 顯示方式
-        .status_item.goto 前往
-        .status_item.time {{time}}
-        .status_item.siricon
+        .status_item.appleicon(v-on:click="did_select($event, 0)"
+        v-on:mouseenter="did_select($event, 0)")
+          img(src="/apple.png")
+        .status_item.application(v-on:click="did_select($event, 1)" v-on:mouseenter="did_select($event, 1)") {{application}}
+          .down_list(v-if="down_list[1]" v-on:mouseleave="out_list")
+            .list_item.down_line(v-on:mouseenter="did_select($event, 1)" v-on:mouseout="no_select") 關於{{application}}
+            .list_item.down_line(v-on:mouseenter="did_select($event, 1)" 
+            v-on:mouseout="no_select") 偏好設定...
+              span.sub_item ⌘,
+            .list_item(v-on:mouseenter="did_select($event, 1)" 
+            v-on:mouseout="no_select") 隱藏{{application}}
+              span.sub_item ⌘H
+            .list_item.down_line(v-on:mouseenter="did_select($event, 1)" 
+            v-on:mouseout="no_select") 隱藏其他
+              span.sub_item ⌘⌥H
+            .list_item(v-on:mouseenter="did_select($event, 1)" v-on:mouseout="no_select") 結束{{application}}
+              span.sub_item ⌘Q
+
+        .status_item.file(v-on:click="did_select($event, 2)" v-on:mouseenter="did_select($event, 2)") 檔案
+          .down_list(v-if="down_list[2]" v-on:mouseleave="out_list")
+            .list_item(v-on:mouseenter="did_select($event, 2)" v-on:mouseout="no_select") 打開
+            .list_item.down_line(v-on:mouseenter="did_select($event, 2)" 
+            v-on:mouseout="no_select") 打開新檔案
+              .sub_item ⌘,
+            .list_item(v-on:mouseenter="did_select($event, 2)" v-on:mouseout="no_select") 複製
+            .list_item(v-on:mouseenter="did_select($event, 2)" v-on:mouseout="no_select") 重新命名
+              span.sub_item ⌘Q
+        .status_item.edit(v-on:click="did_select($event, 3)" v-on:mouseenter="did_select($event, 0)") 編輯
+        .status_item.show(v-on:click="did_select($event, 4)" v-on:mouseenter="did_select($event, 0)") 顯示方式
+        .status_item.goto(v-on:click="did_select($event, 5)" v-on:mouseenter="did_select($event, 0)") 前往
+        .status_item.time(v-on:click="did_select($event, 6)") {{time}}
+        .status_item.siricon(v-on:click="did_select($event, 7)")
     .container
-      VueDragResize(:isActive="false" :parentLimitation="true" :w="800" :h="600" :x="90" :y="90" v-on:resizing="resize" v-on:dragging="resize"  @activated="onActivated(true)" @deactivated="onActivated(false)")
+      VueDragResize(:isActive="false" :parentLimitation="false" :w="800" :h="600" :x="90" :y="90" v-on:resizing="resize" v-on:dragging="resize"  @activated="onActivated(true)" @deactivated="onActivated(false)")
         .window#windows
           .bar
             .close.round_btn
@@ -43,12 +67,28 @@ export default {
   data(){ 
     return {
       application: "VUE",
-      time: ""
+      time: "",
+      last_state: null,
+      now_list: null,
+      downlist_number: null,
+      focus: false
     }
   },
   mounted() {
     this.tunami_effect()
     this.setDates()
+  },
+  computed: {
+    down_list () {
+      var list = []
+      for(var i=0; i<6; i++){
+        if(i != this.downlist_number)
+          list.push(false)
+        else
+          list.push(true)
+      }
+      return list
+    }
   },
   methods: {
     tunami_effect: function(){
@@ -95,6 +135,36 @@ export default {
     },
     test: function(){
       console.log("test");
+    },
+    did_select: function(obj, target){
+      // console.log(obj.target.parentNode.className)
+      if(obj.target.parentNode.className == "status_items"){
+        if(this.now_list){
+          console.log("ttt");
+          this.now_list.style.backgroundColor = "transparent"
+        }
+        this.now_list = obj.target
+      }
+      this.downlist_number = target
+      if(this.last_state){
+        this.last_state.style.backgroundColor = "transparent"
+      }
+      this.last_state = obj.target
+      obj.target.style.backgroundColor = "#005CC0"
+
+      //標題還要是藍色
+      this.now_list.style.backgroundColor = "#005CC0"
+    },
+    no_select: function(){
+      this.last_state.style.backgroundColor = "transparent"
+    },
+    out_list: function(){
+      // this.downlist_number = null
+    },
+    white_space: function(){
+      this.downlist_number = null
+      if(this.now_list)
+        this.now_list.style.backgroundColor = "transparent"
     }
   }
 }
@@ -274,7 +344,7 @@ section
   
 .statusbar
   width: 100%
-  height: 1.8rem
+  height: 28x
   background-color: #1d1e1e
 
 .status_items
@@ -285,12 +355,14 @@ section
   color: white
 
 .status_item
+  position: relative
   height: 100%
-  margin-right: 15px
   font-weight: bold
   cursor: pointer
   text-align: center
   line-height: 1.8rem
+  padding: 0px 12px 0px 12px
+
 
 .application
   padding-top: 0
@@ -298,11 +370,20 @@ section
 
 .appleicon
   margin-left: 20px
-  width: 16px
-  background: url(/apple.png) no-repeat 
-  background-size: contain
+  width: 50px
+  height: 100%
+  // background: url(/apple.png) no-repeat 
+  // background-size: contain
   background-position: center
+  display: flex
+  flex-direction: column
+  align-items: center
+  img
+    width: 80%
+    object-fit: contain
 
+
+    
 .siricon
   width: 18px
   background: url(/siri.png) no-repeat 
@@ -314,7 +395,27 @@ section
 .time
   justify-self: end
   margin-left: auto
-    
 
+.down_list
+  position: absolute
+  left: -1px
+  background-color: rgba(50, 50, 50, .8)
+  width: 13rem
+  border-radius: 0px 0px 5px 5px
+  display: flex
+  flex-direction: column
+
+  z-index: 999  
+  .list_item
+    text-align: left
+    padding-left: 20px
+
+  .down_line
+    border-bottom: solid 1.5px rgba(255,255,255, .2)
+
+.sub_item
+  float: right
+  padding-right: 10px
+  pointer-events: none
 
 </style>
