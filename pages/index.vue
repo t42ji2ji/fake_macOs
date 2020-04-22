@@ -7,17 +7,17 @@
           img(src="/apple.png")
         .status_item.application(v-on:click="did_select($event, 1)" v-on:mouseenter="did_select($event, 1)") {{application}}
           .down_list(v-if="down_list[1]" v-on:mouseleave="out_list")
-            .list_item.down_line(v-on:mouseenter="did_select($event, 1)" v-on:mouseout="no_select") 關於{{application}}
+            .list_item.down_line(v-on:mouseenter="did_select($event, 1)" v-on:mouseout="no_select") 關於 {{application}}
             .list_item.down_line(v-on:mouseenter="did_select($event, 1)" 
             v-on:mouseout="no_select") 偏好設定...
               span.sub_item ⌘,
             .list_item(v-on:mouseenter="did_select($event, 1)" 
-            v-on:mouseout="no_select") 隱藏{{application}}
+            v-on:mouseout="no_select") 隱藏 {{application}}
               span.sub_item ⌘H
             .list_item.down_line(v-on:mouseenter="did_select($event, 1)" 
             v-on:mouseout="no_select") 隱藏其他
               span.sub_item ⌘⌥H
-            .list_item(v-on:mouseenter="did_select($event, 1)" v-on:mouseout="no_select") 結束{{application}}
+            .list_item(v-on:mouseenter="did_select($event, 1)" v-on:mouseout="no_select") 結束 {{application}}
               span.sub_item ⌘Q
 
         .status_item.file(v-on:click="did_select($event, 2)" v-on:mouseenter="did_select($event, 2)") 檔案
@@ -56,15 +56,15 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VueDragResize from 'vue-drag-resize'
+import Logo from "~/components/Logo.vue";
+import VueDragResize from "vue-drag-resize";
 
 export default {
   components: {
     Logo,
     VueDragResize
   },
-  data(){ 
+  data() {
     return {
       application: "VUE",
       time: "",
@@ -72,28 +72,26 @@ export default {
       now_list: null,
       downlist_number: null,
       focus: false
-    }
+    };
   },
   mounted() {
-    this.tunami_effect()
-    this.setDates()
+    this.tunami_effect();
+    this.setDates();
   },
   computed: {
-    down_list () {
-      var list = []
-      for(var i=0; i<6; i++){
-        if(i != this.downlist_number)
-          list.push(false)
-        else
-          list.push(true)
+    down_list() {
+      var list = [];
+      for (var i = 0; i < 6; i++) {
+        if (i != this.downlist_number) list.push(false);
+        else list.push(true);
       }
-      return list
+      return list;
     }
   },
   methods: {
-    tunami_effect: function(){
-      $(document).ready(function(){
-        $('.item img').resizeOnApproach({
+    tunami_effect: function() {
+      $(document).ready(function() {
+        $(".item img").resizeOnApproach({
           elementDefault: 80,
           elementClosest: 140,
           triggerDistance: 200,
@@ -102,72 +100,71 @@ export default {
       });
     },
     resize: function(newRect) {
-        this.width = newRect.width;
-        this.height = newRect.height;
-        this.top = newRect.top;
-        this.left = newRect.left;
+      this.width = newRect.width;
+      this.height = newRect.height;
+      this.top = newRect.top;
+      this.left = newRect.left;
     },
-    onActivated: function(active){
-      let element = document.getElementById("windows")
-      if(active){
-        element.style.boxShadow = "20px 20px 50px #1c1c1c"
-      }else{
-        element.style.boxShadow = "none"
+    onActivated: function(active) {
+      let element = document.getElementById("windows");
+      if (active) {
+        element.style.boxShadow = "20px 20px 50px #1c1c1c";
+      } else {
+        element.style.boxShadow = "none";
       }
-
     },
-    setDates: function(){
-      var month = new Array(7)
-      month[1] = "週一"
-      month[2] = "週二"
-      month[3] = "週三"
-      month[4] = "週四"
-      month[5] = "週五"
-      month[6] = "週六"
-      month[0] = "週日"
-      let timmer = (()=>{
-        var dt = new Date()
-        let min = dt.getMinutes() < 10 ? "0" + dt.getMinutes() : dt.getMinutes()
-        this.time = month[dt.getDay()] + " " + dt.getHours() + ":" + min
-      })
-      timmer()
-      let timer = setInterval(timmer, 60000)
+    setDates: function() {
+      var month = new Array(7);
+      month[1] = "週一";
+      month[2] = "週二";
+      month[3] = "週三";
+      month[4] = "週四";
+      month[5] = "週五";
+      month[6] = "週六";
+      month[0] = "週日";
+      let timmer = () => {
+        var dt = new Date();
+        let min =
+          dt.getMinutes() < 10 ? "0" + dt.getMinutes() : dt.getMinutes();
+        this.time = month[dt.getDay()] + " " + dt.getHours() + ":" + min;
+      };
+      timmer();
+      let timer = setInterval(timmer, 60000);
     },
-    test: function(){
+    test: function() {
       console.log("test");
     },
-    did_select: function(obj, target){
+    did_select: function(obj, target) {
       // console.log(obj.target.parentNode.className)
-      if(obj.target.parentNode.className == "status_items"){
-        if(this.now_list){
+      if (obj.target.parentNode.className == "status_items") {
+        if (this.now_list) {
           console.log("ttt");
-          this.now_list.style.backgroundColor = "transparent"
+          this.now_list.style.backgroundColor = "transparent";
         }
-        this.now_list = obj.target
+        this.now_list = obj.target;
       }
-      this.downlist_number = target
-      if(this.last_state){
-        this.last_state.style.backgroundColor = "transparent"
+      this.downlist_number = target;
+      if (this.last_state) {
+        this.last_state.style.backgroundColor = "transparent";
       }
-      this.last_state = obj.target
-      obj.target.style.backgroundColor = "#005CC0"
+      this.last_state = obj.target;
+      obj.target.style.backgroundColor = "#005CC0";
 
       //標題還要是藍色
-      this.now_list.style.backgroundColor = "#005CC0"
+      this.now_list.style.backgroundColor = "#005CC0";
     },
-    no_select: function(){
-      this.last_state.style.backgroundColor = "transparent"
+    no_select: function() {
+      this.last_state.style.backgroundColor = "transparent";
     },
-    out_list: function(){
+    out_list: function() {
       // this.downlist_number = null
     },
-    white_space: function(){
-      this.downlist_number = null
-      if(this.now_list)
-        this.now_list.style.backgroundColor = "transparent"
+    white_space: function() {
+      this.downlist_number = null;
+      if (this.now_list) this.now_list.style.backgroundColor = "transparent";
     }
   }
-}
+};
 </script>
 
 <style lang="sass">
@@ -193,7 +190,6 @@ section
   display: flex
   flex-direction: column
 
-
 .container
   width: 100%
   height: 100%
@@ -207,13 +203,12 @@ section
   bottom: 0rem
   left: 50%
   transform: translateX(-50%)
-  
+
   // filter: blur(8px)
   // opacity: 0.6
 
 .toolbar:hover .cover
   margin-top: 0rem
-  
 
 .cover
   width: 100%
@@ -222,7 +217,6 @@ section
   pointer-events: auto
   background-color: #262F3C
   // opacity: 0.7
-  margin-top: 6rem
   transition: .5s
   border-radius: 5px 5px 0px 0px
   display: flex
@@ -236,36 +230,35 @@ section
   justify-content: center
   align-items: center
   transition: .1s
-  
+
 .icon
   width: 80%
   margin: 0 auto
   padding-bottom: 10px
   position: relative
 .item-1
-  content:url("http://icons.iconarchive.com/icons/osullivanluke/orb-os-x/256/Safari-icon.png")
+  content: url("http://icons.iconarchive.com/icons/osullivanluke/orb-os-x/256/Safari-icon.png")
 .item-2
-  content:url("http://icons.iconarchive.com/icons/johanchalibert/mac-osx-yosemite/1024/launchpad-icon.png")
+  content: url("http://icons.iconarchive.com/icons/johanchalibert/mac-osx-yosemite/1024/launchpad-icon.png")
 .item-3
-  content:url("https://developer.apple.com/design/human-interface-guidelines/macos/images/icons/appIcons/AppIcon_Photos_2x.png")
+  content: url("https://developer.apple.com/design/human-interface-guidelines/macos/images/icons/appIcons/AppIcon_Photos_2x.png")
 .item-4
-  content:url("https://user-images.githubusercontent.com/49339/32078472-5053adea-baa7-11e7-9034-519002f12ac7.png")
+  content: url("https://user-images.githubusercontent.com/49339/32078472-5053adea-baa7-11e7-9034-519002f12ac7.png")
 .item-5
-  content:url("https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/1200px-Steam_icon_logo.svg.png")
+  content: url("https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/1200px-Steam_icon_logo.svg.png")
 .item-6
-  content:url("https://www.macupdate.com/images/icons256/58607.png?d=1504272826")
+  content: url("https://www.macupdate.com/images/icons256/58607.png?d=1504272826")
 .item-7
-  content:url("https://support.apple.com/library/content/dam/edam/applecare/images/en_US/social/thumbnail/macos-mojave-trash-icon-full-thumbnail_2x.png")
+  content: url("https://support.apple.com/library/content/dam/edam/applecare/images/en_US/social/thumbnail/macos-mojave-trash-icon-full-thumbnail_2x.png")
 
 .icon :hover
   width: 120%
-  
-  
+
 .window
   width: 100%
   height: 100%
   background-color: white
-  border-radius: 5px 
+  border-radius: 5px
   overflow: hidden
   position: relative
   display: flex
@@ -305,7 +298,7 @@ section
     color: #5F6368
     padding: 5px 7px
     margin: 8px 7px
-  
+
 .round_btn
   width: 12px
   height: 12px
@@ -323,25 +316,24 @@ section
   background-color: #28CA41
   @include tt('A')
 
-
 .vdr.active:before
-    content: ''
-    width: 100%
-    height: 100%
-    position: absolute
-    top: 0
-    left: 0
-    box-sizing: border-box
-    outline: none
-.vdr-stick 
-    box-sizing: border-box
-    position: absolute
-    font-size: 1px
-    background: red
-    border: 1px solid red
-    box-shadow: 0 0 2px red
-    opacity: 0
-  
+  content: ''
+  width: 100%
+  height: 100%
+  position: absolute
+  top: 0
+  left: 0
+  box-sizing: border-box
+  outline: none
+.vdr-stick
+  box-sizing: border-box
+  position: absolute
+  font-size: 1px
+  background: red
+  border: 1px solid red
+  box-shadow: 0 0 2px red
+  opacity: 0
+
 .statusbar
   width: 100%
   height: 28x
@@ -363,7 +355,6 @@ section
   line-height: 1.8rem
   padding: 0px 12px 0px 12px
 
-
 .application
   padding-top: 0
   font-weight: bolder
@@ -372,7 +363,7 @@ section
   margin-left: 20px
   width: 50px
   height: 100%
-  // background: url(/apple.png) no-repeat 
+  // background: url(/apple.png) no-repeat
   // background-size: contain
   background-position: center
   display: flex
@@ -382,11 +373,9 @@ section
     width: 80%
     object-fit: contain
 
-
-    
 .siricon
   width: 18px
-  background: url(/siri.png) no-repeat 
+  background: url(/siri.png) no-repeat
   background-size: contain
   background-position: center
   justify-self: end
@@ -405,7 +394,7 @@ section
   display: flex
   flex-direction: column
 
-  z-index: 999  
+  z-index: 999
   .list_item
     text-align: left
     padding-left: 20px
@@ -417,5 +406,4 @@ section
   float: right
   padding-right: 10px
   pointer-events: none
-
 </style>
