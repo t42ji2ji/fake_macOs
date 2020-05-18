@@ -11,6 +11,9 @@ export default {
   router: {
     base: '/fake_macOs/'
   },
+  generate: {
+    dir: 'fake_macOs'
+  },
   /*
    ** Headers of the page
    */
