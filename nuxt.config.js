@@ -8,10 +8,7 @@ const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
 } : {}
 export default {
   mode: 'spa',
-
-  generate: {
-    dir: 'fake_macOs'
-  },
+  ...routerBase,
   /*
    ** Headers of the page
    */
