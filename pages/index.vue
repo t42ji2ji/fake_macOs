@@ -7,31 +7,19 @@
           img(src="/apple.png")
         .status_item.application(v-on:click="did_select($event, 1)" v-on:mouseenter="did_select($event, 1)") {{application}}
           .down_list(v-if="down_list[1]" v-on:mouseleave="out_list")
-            .list_item.down_line(v-on:mouseenter="did_select($event, 1)" v-on:mouseout="no_select") 關於 {{application}}
-            .list_item.down_line(v-on:mouseenter="did_select($event, 1)" 
-            v-on:mouseout="no_select") 偏好設定...
-              span.sub_item ⌘,
-            .list_item(v-on:mouseenter="did_select($event, 1)" 
-            v-on:mouseout="no_select") 隱藏 {{application}}
-              span.sub_item ⌘H
-            .list_item.down_line(v-on:mouseenter="did_select($event, 1)" 
-            v-on:mouseout="no_select") 隱藏其他
-              span.sub_item ⌘⌥H
-            .list_item(v-on:mouseenter="did_select($event, 1)" v-on:mouseout="no_select") 結束 {{application}}
-              span.sub_item ⌘Q
+            .list_item(v-on:mouseenter="did_select($event, 1)" v-on:mouseout="no_select" v-for="item in select[0]" :class="{down_line: item.down_line}") {{item.title}}
+              span.sub_item {{item.subtitle}}
 
         .status_item.file(v-on:click="did_select($event, 2)" v-on:mouseenter="did_select($event, 2)") 檔案
           .down_list(v-if="down_list[2]" v-on:mouseleave="out_list")
-            .list_item(v-on:mouseenter="did_select($event, 2)" v-on:mouseout="no_select") 打開
-            .list_item.down_line(v-on:mouseenter="did_select($event, 2)" 
-            v-on:mouseout="no_select") 打開新檔案
-              .sub_item ⌘,
-            .list_item(v-on:mouseenter="did_select($event, 2)" v-on:mouseout="no_select") 複製
-            .list_item(v-on:mouseenter="did_select($event, 2)" v-on:mouseout="no_select") 重新命名
-              span.sub_item ⌘Q
-        .status_item.edit(v-on:click="did_select($event, 3)" v-on:mouseenter="did_select($event, 0)") 編輯
-        .status_item.show(v-on:click="did_select($event, 4)" v-on:mouseenter="did_select($event, 0)") 顯示方式
-        .status_item.goto(v-on:click="did_select($event, 5)" v-on:mouseenter="did_select($event, 0)") 前往
+            .list_item(v-on:mouseenter="did_select($event, 2)" v-on:mouseout="no_select" v-for="item in select[1]" :class="{down_line: item.down_line}") {{item.title}}
+              span.sub_item {{item.subtitle}}
+        .status_item.edit(v-on:click="did_select($event, 3)" v-on:mouseenter="did_select($event, 3)") 編輯
+          .down_list(v-if="down_list[3]" v-on:mouseleave="out_list")
+            .list_item(v-on:mouseenter="did_select($event, 3)" v-on:mouseout="no_select" v-for="item in select[2]" :class="{down_line: item.down_line}") {{item.title}}
+              span.sub_item {{item.subtitle}}
+        //- .status_item.show(v-on:click="did_select($event, 4)" v-on:mouseenter="did_select($event, 0)") 顯示方式
+        //- .status_item.goto(v-on:click="did_select($event, 5)" v-on:mouseenter="did_select($event, 0)") 前往
         .status_item.time(v-on:click="did_select($event, 6)") {{time}}
         .status_item.siricon(v-on:click="did_select($event, 7)")
     .container
@@ -71,7 +59,80 @@ export default {
       last_state: null,
       now_list: null,
       downlist_number: null,
-      focus: false
+      focus: false,
+      select: [
+        [
+          {
+            title: "關於VUE",
+            subtitle: "",
+            down_line: true
+          },
+          {
+            title: "偏好設定...",
+            subtitle: "⌘,",
+            down_line: true
+          },
+          {
+            title: "隱藏VUE",
+            subtitle: "⌘H",
+            down_line: false
+          },
+          {
+            title: "隱藏其他",
+            subtitle: "⌘⌥H",
+            down_line: true
+          },
+          {
+            title: "結束VUE",
+            subtitle: "⌘Q",
+            down_line: true
+          }
+        ],
+        [
+          {
+            title: "打開",
+            subtitle: "",
+            down_line: false
+          },
+          {
+            title: "打開新檔案",
+            subtitle: "⌘,",
+            down_line: true
+          },
+          {
+            title: "複製",
+            subtitle: "",
+            down_line: false
+          },
+          {
+            title: "重新命名",
+            subtitle: "",
+            down_line: false
+          }
+        ],
+        [
+          {
+            title: "復原",
+            subtitle: "⌘Z",
+            down_line: false
+          },
+          {
+            title: "取消復原",
+            subtitle: "⇧⌘Z",
+            down_line: true
+          },
+          {
+            title: "複製",
+            subtitle: "⌘C",
+            down_line: false
+          },
+          {
+            title: "貼上",
+            subtitle: "⌘V",
+            down_line: false
+          }
+        ]
+      ]
     };
   },
   mounted() {
