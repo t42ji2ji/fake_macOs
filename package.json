@@ -11,7 +11,7 @@
     "generate": "nuxt generate",
     "heroku-postbuild": "npm run build",
     "test": "jest",
-    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
+    "deploy": "push-dir --dir=fake_maxOs --branch=gh-pages --cleanup",
     "build:gh-pages": "DEPLOY_ENV=GH_PAGES nuxt build",
     "generate:gh-pages": "DEPLOY_ENV=GH_PAGES nuxt generate"
   },
